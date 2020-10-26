@@ -9,23 +9,28 @@
 
     <body>
         
-        <input id="inLletra">
+        <button id="btIntrodirLletra">Introdueix una lletra</button>
 
         <button id="btComprovar">Comprovar lletra</button>
 
         <button id="btAbandonar">Abandonar partida</button>
 
+        
+
         <script>
+           
             
             var resposta = prompt("Entra una paraula o grup de paraules (separades per comes i sense espais):");
             var llistaparaules;
 
             if(resposta.includes(",")){
                 llistaparaules = resposta.toLowerCase().split(",");
+                //console.log(llistaparaules);
             }
 
             else{
                 llistaparaules = resposta;
+                //console.log(llistaparaules);
             }
 
             let finestra1 = null;
@@ -34,6 +39,13 @@
 
             function obrirFinestra1 (){
                 finestra1 = window.open("finestra1.html","finestra1","top=100, left=800, width=300, height=200");
+            }
+
+            document.getElementById("btIntrodirLletra").addEventListener("click", introdueixLletra);
+
+            function introdueixLletra(){
+                var lletra = prompt("Introdueixi la lletra desitjada: ");
+
             }
 
         </script>
