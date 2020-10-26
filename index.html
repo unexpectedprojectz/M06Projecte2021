@@ -1,30 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
+    
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Finestra Principal</title>
     </head>
+
     <body>
-        <button id="ObrirFill">Obrir Finestra Fill 1</button>
+        
+        <input id="inLletra">
 
-        <button id="ObrirFill2">Obrir Finestra Fill 2</button>
+        <button id="btComprovar">Comprovar lletra</button>
 
-        <button id="ObrirFill3">Obrir Finestra Fill 3</button>
+        <button id="btAbandonar">Abandonar partida</button>
 
         <script>
-            let fill = null;
+            
+            var resposta = prompt("Entra una paraula o grup de paraules (separades per comes i sense espais):");
+            var llistaparaules;
 
-            document.getElementById("ObrirFill").addEventListener("click", obrirFill);
+            if(resposta.includes(",")){
+                llistaparaules = resposta.toLowerCase().split(",");
+            }
 
-            document.getElementById("ObrirFill2").addEventListener("click", obrirFill);
+            else{
+                llistaparaules = resposta;
+            }
 
-            document.getElementById("ObrirFill3").addEventListener("click", obrirFill);
+            let finestra1 = null;
 
-            function obrirFill (){
-                fill = window.open("fill.html","fill","top=100, left=800, width=300, height=200");
+            obrirFinestra1();
+
+            function obrirFinestra1 (){
+                finestra1 = window.open("finestra1.html","finestra1","top=100, left=800, width=300, height=200");
             }
 
         </script>
+        
     </body>
+
 </html>
