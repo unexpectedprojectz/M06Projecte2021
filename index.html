@@ -21,7 +21,7 @@
            
             
             var resposta = prompt("Entra una paraula o grup de paraules (separades per comes i sense espais):");
-            var llistaparaules;
+            var llistaparaules, lletra;
 
             if(resposta.includes(",")){
                 llistaparaules = resposta.toLowerCase().split(",");
@@ -32,6 +32,18 @@
                 llistaparaules = resposta;
                 //console.log(llistaparaules);
             }
+
+            //variable per saber el numero de paraules introduïdes
+            var numParaules = llistaparaules.length;
+            //console.log(numParaules);
+
+            //num aleatori entre la posició 0 i el total de paraules (llistaparaules.length)
+            var numAleatorio = Math.floor(Math.random() * (numParaules - 0)) + 0;
+            //console.log(numAleatorio);
+
+            //escollir aleatoriament una paraula per començar el joc
+            var paraulaEnJoc = llistaparaules[numAleatorio];
+            console.log(paraulaEnJoc);
 
             let finestra1 = null;
 
@@ -44,7 +56,24 @@
             document.getElementById("btIntrodirLletra").addEventListener("click", introdueixLletra);
 
             function introdueixLletra(){
-                var lletra = prompt("Introdueixi la lletra desitjada: ");
+                lletra = prompt("Introdueixi la lletra desitjada: ");
+                console.log(lletra);
+                //comprovar si la lletra està o no a la paraula FALTA PONER ESTO EN EL METODO DE ABAJO PARA QUE LO HAGA CUANDO
+                //SE DE AL BOTON DE COMPROVA
+                if(paraulaEnJoc.indexOf(lletra) != -1){
+                        console.log('si');
+                    }else {
+                        console.log('no');
+
+                    }
+
+            }
+
+            document.getElementById("btComprovar").addEventListener("click", comprovarLletra);
+
+            function comprovarLletra(){
+
+  
 
             }
 
