@@ -9,66 +9,87 @@
 
     <body>
 
-        <button id="btIntrodirLletra">Introdueix una lletra</button>
+        <button id="btIntroduirLletra">Introdueix una lletra</button>
         <button id="btAbandonar">Abandonar partida</button>
 
         <script>
-            let finestra1 = null,finestra2 = null,finestra3 = null;
-            var llistaparaules, lletra, paraulaEnJoc, numParaules, numAleatorio ;
+            
+            let finestra1 = null, finestra2 = null, finestra3 = null;
+            var llistaparaules, lletra, paraulaEnJoc, numParaules, numAleatori;
+            var estatParaula = [];
+            var paraulaIncognita = "";
             
             var resposta = prompt("Entra una paraula o grup de paraules (separades per comes i sense espais):");
             
             //s'introdueixen més d'1 paraula
             if(resposta.includes(",")){
-                llistaparaules = resposta.toLowerCase().split(",");
+                llistaparaules = resposta.trim().toLowerCase().split(",");
                 //console.log(llistaparaules);
                 //variable per saber el numero de paraules introduïdes
                 numParaules = llistaparaules.length;
                 //console.log(numParaules);
                 //num aleatori entre la posició 0 i el total de paraules (llistaparaules.length)
-                numAleatorio = Math.floor(Math.random() * (numParaules - 0)) + 0;
-                //console.log(numAleatorio);
+                numAleatori = Math.floor(Math.random() * (numParaules - 0)) + 0;
+                //console.log(numAleatori);
                 //escollir aleatoriament una paraula per començar el joc
-                paraulaEnJoc = llistaparaules[numAleatorio];
-                console.log(paraulaEnJoc);
+                paraulaEnJoc = llistaparaules[numAleatori];
+                //console.log(paraulaEnJoc);
             }
             //si no s'introdueix cap paraula, es juga una de les següents
             else if(resposta == ""){
                 llistaparaules = ["poma", "ulleres", "barcelona", "piscina", "neu"];
                 numParaules = llistaparaules.length;
-                numAleatorio = Math.floor(Math.random() * (numParaules - 0)) + 0;
-                paraulaEnJoc = llistaparaules[numAleatorio];
-                console.log(paraulaEnJoc);
+                numAleatori = Math.floor(Math.random() * (numParaules - 0)) + 0;
+                paraulaEnJoc = llistaparaules[numAleatori];
+                //console.log(paraulaEnJoc);
             //si s'introdueix 1 paraula
             }else {
                 paraulaEnJoc = resposta;
-                console.log(paraulaEnJoc);
+                //console.log(paraulaEnJoc);
             }
 
-            //obris les tres finestres secundaries
+            //obrim les tres finestres secundaries
             obrirFinestres();
 
-            function obrirFinestres (){
-                finestra1 = window.open("finestra1.html","finestra1","top=100, left=800, width=300, height=200");
-                finestra2 = window.open("finestra2.html","finestra2","top=100, left=1200, width=300, height=200");
+            function obrirFinestres(){
+                finestra1 = window.open("finestra1.html","finestra1","top=300, left=400, width=300, height=200");
+                finestra2 = window.open("finestra2.html","finestra2","top=600, left=400, width=300, height=200");
                 finestra3 = window.open("finestra3.html","finestra3","top=450, left=1000, width=300, height=200");
             }
 
-            document.getElementById("btIntrodirLletra").addEventListener("click", introdueixLletra);
+            //omplim l'estat de la paraula amb espais incògnita
+            for (var i=0; i < paraulaEnJoc.length; i++) {
+                estatParaula[i] = '_';
+            }
+
+            for (var i=0; i < estatParaula.length; i++) {
+                console.log(estatParaula[i]);
+                paraulaIncognita.concat(estatParaula[i]);
+            }
+
+            console.log(paraulaIncognita);
+
+            prepararParaulaIncognita();
+
+            function prepararParaulaIncognita(){
+                finestra2.window.document.getElementById("paraulaincognita").innerText = paraulaIncognita;
+            }
+
+            document.getElementById("btIntroduirLletra").addEventListener("click", introdueixLletra);
 
             //introduïr i comprovar lletres
             function introdueixLletra(){
                 lletra = prompt("Introdueixi la lletra desitjada: ");
-                console.log(lletra);
+                //console.log(lletra);
                  //comprovar si la lletra està o no a la paraula
                  if(paraulaEnJoc.indexOf(lletra) != -1){
-                        console.log('si');
+                        //console.log('si');
                         alert("La paraula en joc si conté la lletra " + lletra);
                     }else if (lletra == "") {
-                        console.log('no');
+                        //console.log('no');
                         alert("Introdueixi una lletra!");
                     } else {
-                        console.log('no');
+                        //console.log('no');
                         alert("La paraula en joc no conté la lletra " + lletra);
                     }
             }
