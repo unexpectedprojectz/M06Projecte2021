@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-    
+
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,77 +8,71 @@
     </head>
 
     <body>
-        
+
         <button id="btIntrodirLletra">Introdueix una lletra</button>
-
-        <button id="btComprovar">Comprovar lletra</button>
-
         <button id="btAbandonar">Abandonar partida</button>
 
-        
-
         <script>
-           
+            let finestra1 = null,finestra2 = null,finestra3 = null;
+            var llistaparaules, lletra, paraulaEnJoc, numParaules, numAleatorio ;
             
             var resposta = prompt("Entra una paraula o grup de paraules (separades per comes i sense espais):");
-            var llistaparaules, lletra;
-
+            
+            //s'introdueixen més d'1 paraula
             if(resposta.includes(",")){
                 llistaparaules = resposta.toLowerCase().split(",");
                 //console.log(llistaparaules);
+                //variable per saber el numero de paraules introduïdes
+                numParaules = llistaparaules.length;
+                //console.log(numParaules);
+                //num aleatori entre la posició 0 i el total de paraules (llistaparaules.length)
+                numAleatorio = Math.floor(Math.random() * (numParaules - 0)) + 0;
+                //console.log(numAleatorio);
+                //escollir aleatoriament una paraula per començar el joc
+                paraulaEnJoc = llistaparaules[numAleatorio];
+                console.log(paraulaEnJoc);
+            }
+            //si no s'introdueix cap paraula, es juga una de les següents
+            else if(resposta == ""){
+                llistaparaules = ["poma", "ulleres", "barcelona", "piscina", "neu"];
+                numParaules = llistaparaules.length;
+                numAleatorio = Math.floor(Math.random() * (numParaules - 0)) + 0;
+                paraulaEnJoc = llistaparaules[numAleatorio];
+                console.log(paraulaEnJoc);
+            //si s'introdueix 1 paraula
+            }else {
+                paraulaEnJoc = resposta;
+                console.log(paraulaEnJoc);
             }
 
-            else{
-                llistaparaules = resposta;
-                //console.log(llistaparaules);
-            }
+            //obris les tres finestres secundaries
+            obrirFinestres();
 
-            //variable per saber el numero de paraules introduïdes
-            var numParaules = llistaparaules.length;
-            //console.log(numParaules);
-
-            //num aleatori entre la posició 0 i el total de paraules (llistaparaules.length)
-            var numAleatorio = Math.floor(Math.random() * (numParaules - 0)) + 0;
-            //console.log(numAleatorio);
-
-            //escollir aleatoriament una paraula per començar el joc
-            var paraulaEnJoc = llistaparaules[numAleatorio];
-            console.log(paraulaEnJoc);
-
-            let finestra1 = null;
-
-            obrirFinestra1();
-
-            function obrirFinestra1 (){
+            function obrirFinestres (){
                 finestra1 = window.open("finestra1.html","finestra1","top=100, left=800, width=300, height=200");
+                finestra2 = window.open("finestra2.html","finestra2","top=100, left=1200, width=300, height=200");
+                finestra3 = window.open("finestra3.html","finestra3","top=450, left=1000, width=300, height=200");
             }
 
             document.getElementById("btIntrodirLletra").addEventListener("click", introdueixLletra);
 
+            //introduïr i comprovar lletres
             function introdueixLletra(){
                 lletra = prompt("Introdueixi la lletra desitjada: ");
                 console.log(lletra);
-                //comprovar si la lletra està o no a la paraula FALTA PONER ESTO EN EL METODO DE ABAJO PARA QUE LO HAGA CUANDO
-                //SE DE AL BOTON DE COMPROVA
-                if(paraulaEnJoc.indexOf(lletra) != -1){
+                 //comprovar si la lletra està o no a la paraula
+                 if(paraulaEnJoc.indexOf(lletra) != -1){
                         console.log('si');
-                    }else {
+                        alert("La paraula en joc si conté la lletra " + lletra);
+                    }else if (lletra == "") {
                         console.log('no');
-
+                        alert("Introdueixi una lletra!");
+                    } else {
+                        console.log('no');
+                        alert("La paraula en joc no conté la lletra " + lletra);
                     }
-
             }
-
-            document.getElementById("btComprovar").addEventListener("click", comprovarLletra);
-
-            function comprovarLletra(){
-
-  
-
-            }
-
         </script>
-        
     </body>
 
 </html>
