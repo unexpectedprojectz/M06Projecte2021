@@ -14,7 +14,7 @@
 
         <script>
             
-            let finestra1 = null, finestra2 = null, finestra3 = null;
+            let finestra1, finestra2, finestra3;
             var llistaparaules, lletra, paraulaEnJoc, numParaules, numAleatori;
             var estatParaula = [];
             var paraulaIncognita = "";
@@ -52,27 +52,31 @@
             obrirFinestres();
 
             function obrirFinestres(){
-                finestra1 = window.open("finestra1.html","finestra1","top=300, left=400, width=300, height=200");
-                finestra2 = window.open("finestra2.html","finestra2","top=600, left=400, width=300, height=200");
-                finestra3 = window.open("finestra3.html","finestra3","top=450, left=1000, width=300, height=200");
+                finestra1 = window.open("finestra1.html", "finestra1", "top=300, left=400, width=300, height=200");
+                finestra2 = window.open("finestra2.html", "finestra2", "top=600, left=400, width=300, height=200");
+                finestra3 = window.open("finestra3.html", "finestra3", "top=450, left=1000, width=300, height=200");
             }
 
             //omplim l'estat de la paraula amb espais incògnita
             for (var i=0; i < paraulaEnJoc.length; i++) {
                 estatParaula[i] = '_';
             }
-
+            
+            //preparem la paraula amb incognites
             for (var i=0; i < estatParaula.length; i++) {
                 console.log(estatParaula[i]);
-                paraulaIncognita.concat(estatParaula[i]);
+                paraulaIncognita = paraulaIncognita + " " + estatParaula[i];
             }
 
             console.log(paraulaIncognita);
 
             prepararParaulaIncognita();
 
+            //coloquem la paraula amb incognites a la finestra2
             function prepararParaulaIncognita(){
-                finestra2.window.document.getElementById("paraulaincognita").innerText = paraulaIncognita;
+                finestra2.window.onload = function() {
+                    finestra2.window.document.getElementById("paraulaincognita").innerText = paraulaIncognita;
+                };
             }
 
             document.getElementById("btIntroduirLletra").addEventListener("click", introdueixLletra);
