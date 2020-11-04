@@ -15,9 +15,10 @@
         <script>
             
             let finestra1, finestra2, finestra3;
-            var llistaparaules, lletra, paraulaEnJoc, numParaules, numAleatori;
+            var llistaparaules, lletra, paraulaEnJoc, numParaules, numAleatori, srcImatge;
             var estatParaula = [];
             var paraulaIncognita = "";
+            var numErrors = 0;
             
             var resposta = prompt("Entra una paraula o grup de paraules (separades per comes i sense espais):");
             
@@ -44,7 +45,7 @@
                 //console.log(paraulaEnJoc);
             //si s'introdueix 1 paraula
             }else {
-                paraulaEnJoc = resposta;
+                paraulaEnJoc = resposta.trim().toLowerCase();
                 //console.log(paraulaEnJoc);
             }
 
@@ -64,38 +65,86 @@
             
             //preparem la paraula amb incognites
             for (var i=0; i < estatParaula.length; i++) {
-                console.log(estatParaula[i]);
                 paraulaIncognita = paraulaIncognita + " " + estatParaula[i];
             }
 
-            console.log(paraulaIncognita);
+            prepararParaulaIncognita();
 
-            canviarParaulaIncognita();
-
-            //coloquem la paraula amb incognites a la finestra2
-            function canviarParaulaIncognita(){
+            //coloquem la paraula amb incognites a la finestra2 per començar el joc
+            function prepararParaulaIncognita(){
                 finestra2.window.onload = function() {
                     finestra2.window.document.getElementById("paraulaincognita").innerText = paraulaIncognita;
                 };
+            }
+
+            function canviarParaulaIncognita(){
+                finestra2.window.document.getElementById("paraulaincognita").innerText = paraulaIncognita;
+            }
+
+            function canviarImatgePenjat(numErrors){
+                
+                switch (numErrors){
+                    case 1:
+                        srcImatge = "img/1.jpg";
+                    break;
+                    case 2:
+                        srcImatge = "img/2.jpg";
+                    break;
+                    case 3:
+                        srcImatge = "img/3.jpg";
+                    break;
+                    case 4:
+                        srcImatge = "img/4.jpg";
+                    break;
+                    case 5:
+                        srcImatge = "img/5.jpg";
+                    break;
+                }
+                
+                finestra1.window.document.getElementById("imatgePenjat").src = srcImatge;
+
             }
 
             document.getElementById("btIntroduirLletra").addEventListener("click", introdueixLletra);
 
             //introduïr i comprovar lletres
             function introdueixLletra(){
+                
                 lletra = prompt("Introdueixi la lletra desitjada: ");
-                //console.log(lletra);
-                 //comprovar si la lletra està o no a la paraula
-                 if(paraulaEnJoc.indexOf(lletra) != -1){
-                        //console.log('si');
-                        alert("La paraula en joc si conté la lletra " + lletra);
-                    }else if (lletra == "") {
-                        //console.log('no');
-                        alert("Introdueixi una lletra!");
-                    } else {
-                        //console.log('no');
-                        alert("La paraula en joc no conté la lletra " + lletra);
+                lletra = lletra.trim().toLowerCase();
+                //comprovar si la lletra està o no a la paraula
+                if(paraulaEnJoc.indexOf(lletra) != -1){
+
+                    alert("La paraula en joc si conté la lletra " + lletra);
+                    // comprovem si la paraula en joc conté la lletra i si és així ho canviem a estat paraula
+                    for (var i=0; i < paraulaEnJoc.length; i++) {
+                        if (paraulaEnJoc.charAt(i) == lletra){
+                            estatParaula[i] = lletra;
+                        }
+
                     }
+
+                    paraulaIncognita = "";
+                    
+                    // canviem la paraula que mostrem a l'usuari amb el nou estat
+                    for (var i=0; i < estatParaula.length; i++) {
+                        paraulaIncognita = paraulaIncognita + " " + estatParaula[i];
+                    }
+
+                    canviarParaulaIncognita();
+
+                }
+                
+                else if (lletra == "") {
+                    alert("Introdueixi una lletra si us plau...");
+                } 
+                
+                else {
+                    alert("La paraula en joc no conté la lletra " + lletra);
+                    numErrors = numErrors + 1;
+                    canviarImatgePenjat(numErrors);
+                }
+
             }
         </script>
     </body>
