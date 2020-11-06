@@ -18,39 +18,60 @@
             var llistaparaules, lletra, paraulaEnJoc, numParaules, numAleatori, srcImatge;
             var estatParaula = [];
             var paraulaIncognita = "";
-            var numErrors = 0;
-            
-            var resposta = prompt("Entra una paraula o grup de paraules (separades per comes i sense espais):");
-            
-            //s'introdueixen més d'1 paraula
-            if(resposta.includes(",")){
-                llistaparaules = resposta.trim().toLowerCase().split(",");
-                //console.log(llistaparaules);
-                //variable per saber el numero de paraules introduïdes
-                numParaules = llistaparaules.length;
-                //console.log(numParaules);
-                //num aleatori entre la posició 0 i el total de paraules (llistaparaules.length)
-                numAleatori = Math.floor(Math.random() * (numParaules - 0)) + 0;
-                //console.log(numAleatori);
-                //escollir aleatoriament una paraula per començar el joc
-                paraulaEnJoc = llistaparaules[numAleatori];
-                //console.log(paraulaEnJoc);
-            }
-            //si no s'introdueix cap paraula, es juga una de les següents
-            else if(resposta == ""){
-                llistaparaules = ["poma", "ulleres", "barcelona", "piscina", "neu"];
-                numParaules = llistaparaules.length;
-                numAleatori = Math.floor(Math.random() * (numParaules - 0)) + 0;
-                paraulaEnJoc = llistaparaules[numAleatori];
-                //console.log(paraulaEnJoc);
-            //si s'introdueix 1 paraula
-            }else {
-                paraulaEnJoc = resposta.trim().toLowerCase();
-                //console.log(paraulaEnJoc);
-            }
+            var numErrors = 0, pulsat = false, continua = true;
 
-            //obrim les tres finestres secundaries
-            obrirFinestres();
+            document.getElementById("btAbandonar").addEventListener("click", tancarFinestres);
+            document.getElementById("btIntroduirLletra").addEventListener("click", introdueixLletra);
+
+            iniciaPartida();
+            
+            function iniciaPartida(){ 
+                var resposta = prompt("Entra una paraula o grup de paraules (separades per comes i sense espais):");
+                //s'introdueixen més d'1 paraula
+                if(resposta.includes(",")){
+                    llistaparaules = resposta.trim().toLowerCase().split(",");
+                    //console.log(llistaparaules);
+                    //variable per saber el numero de paraules introduïdes
+                    numParaules = llistaparaules.length;
+                    //console.log(numParaules);
+                    //num aleatori entre la posició 0 i el total de paraules (llistaparaules.length)
+                    numAleatori = Math.floor(Math.random() * (numParaules - 0)) + 0;
+                    //console.log(numAleatori);
+                    //escollir aleatoriament una paraula per començar el joc
+                    paraulaEnJoc = llistaparaules[numAleatori];
+                    console.log(paraulaEnJoc);
+                }
+                //si no s'introdueix cap paraula, es juga una de les següents
+                else if(resposta == ""){
+                    llistaparaules = ["poma", "ulleres", "barcelona", "piscina", "neu"];
+                    numParaules = llistaparaules.length;
+                    numAleatori = Math.floor(Math.random() * (numParaules - 0)) + 0;
+                    paraulaEnJoc = llistaparaules[numAleatori];
+                    console.log(paraulaEnJoc);
+                //si s'introdueix 1 paraula
+                }else {
+                    paraulaEnJoc = resposta.trim().toLowerCase();
+                    console.log(paraulaEnJoc);
+                }
+
+                //obrim les tres finestres secundaries
+                obrirFinestres();
+
+                
+
+                //omplim l'estat de la paraula amb espais incògnita
+                for (var i=0; i < paraulaEnJoc.length; i++) {
+                    estatParaula[i] = '_';
+                }
+
+                //preparem la paraula amb incognites
+                for (var i=0; i < estatParaula.length; i++) {
+                    paraulaIncognita = paraulaIncognita + " " + estatParaula[i];
+                }
+
+                prepararParaulaIncognita();
+
+            }
 
             function obrirFinestres(){
                 finestra1 = window.open("finestra1.html", "finestra1", "top=300, left=400, width=300, height=200");
@@ -58,20 +79,20 @@
                 finestra3 = window.open("finestra3.html", "finestra3", "top=450, left=1000, width=300, height=200");
             }
 
-            //omplim l'estat de la paraula amb espais incògnita
-            for (var i=0; i < paraulaEnJoc.length; i++) {
-                estatParaula[i] = '_';
-            }
-            
-            //preparem la paraula amb incognites
-            for (var i=0; i < estatParaula.length; i++) {
-                paraulaIncognita = paraulaIncognita + " " + estatParaula[i];
-            }
+            function tancarFinestres(opcio){
+                finestra1.close();
+                finestra2.close();
+                finestra3.close();
 
-            prepararParaulaIncognita();
+                if(opcio == "Penjat"){
+                    setTimeout(iniciaPartida,10000);
+                }else{
+                    setTimeout(iniciaPartida,5000);
+                }
+            }
 
             //coloquem la paraula amb incognites a la finestra2 per començar el joc
-            function prepararParaulaIncognita(){
+            function prepararParaulaIncognita(){                
                 finestra2.window.onload = function() {
                     finestra2.window.document.getElementById("paraulaincognita").innerText = paraulaIncognita;
                 };
@@ -105,7 +126,7 @@
 
             }
 
-            document.getElementById("btIntroduirLletra").addEventListener("click", introdueixLletra);
+            
 
             //introduïr i comprovar lletres
             function introdueixLletra(){
@@ -140,12 +161,44 @@
                 } 
                 
                 else {
-                    alert("La paraula en joc no conté la lletra " + lletra);
-                    numErrors = numErrors + 1;
-                    canviarImatgePenjat(numErrors);
+                    if(numErrors == 5){
+                        alert("PENJAT !!");
+                        tancarFinestres("Penjat");
+                        
+                    }else {
+                        alert("La paraula en joc no conté la lletra " + lletra);
+                        numErrors = numErrors + 1;
+                        canviarImatgePenjat(numErrors);
+
+                    }
+                }
+            }
+
+                function setCookie(cname,cvalue,exdays) {
+                    var d = new Date();
+                    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+                    var expires = "expires=" + d.toGMTString();
+                    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+                    
                 }
 
-            }
+                function getCookie(cname) {
+                var name = cname + "=";
+                var decodedCookie = decodeURIComponent(document.cookie);
+                var ca = decodedCookie.split(';');
+                for(var i = 0; i < ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                    }
+                    if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                    }
+                }
+                return "";
+                }
+
+            
         </script>
     </body>
 
