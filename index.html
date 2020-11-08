@@ -70,6 +70,7 @@
                 }
 
                 prepararParaulaIncognita();
+                estadistiques();
 
             }
 
@@ -87,8 +88,23 @@
                 if(opcio == "Penjat"){
                     setTimeout(iniciaPartida,10000);
                 }else{
+                    var numAbandonaments = 0; 
+                    document.cookie = "abandonaments=" + numAbandonaments + 1;
                     setTimeout(iniciaPartida,5000);
                 }
+            }
+
+            function estadistiques(){
+                var cookieVictoria = getCookie("victories");
+                var cookieDerrota = getCookie("derrotes");
+                var cookieAbandonaments = getCookie("abandonaments");
+
+                finestra3.window.onload = function() {
+                    finestra3.window.document.getElementById("victories").innerText = "Victories: " + cookieVictoria;
+                    finestra3.window.document.getElementById("derrotes").innerText = "Derrotes: " + cookieDerrota;
+                    finestra3.window.document.getElementById("abandonaments").innerText = "Abandonaments: " + cookieAbandonaments;
+                };        
+
             }
 
             //coloquem la paraula amb incognites a la finestra2 per començar el joc
@@ -159,6 +175,8 @@
                     // /_/g --> expressió regular que busca espais, la g és de(global)
                     if(paraulaIncognita.replace(/ /g, "")==paraulaEnJoc){
                         alert('Victoria');
+                        var numVictories = 0; 
+                        document.cookie = "victories=" + numVictories + 1;
                     }
 
                 }
@@ -170,6 +188,8 @@
                 else {
                     if(numErrors == 5){
                         alert("PENJAT !!");
+                        var numDerrotes = 0; 
+                        document.cookie = "derrotes=" + numDerrotes + 1;
                         tancarFinestres("Penjat");
                         
                     }else {
@@ -181,30 +201,20 @@
                 }
             }
 
-                function setCookie(cname,cvalue,exdays) {
-                    var d = new Date();
-                    d.setTime(d.getTime() + (exdays*24*60*60*1000));
-                    var expires = "expires=" + d.toGMTString();
-                    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-                    
-                }
+            function setCookie(name, value, days) {
+                var d = new Date;
+                d.setTime(d.getTime() + 24*60*60*1000*days);
+                document.cookie = name + "=" + value + ";path=/;expires=" + d.toGMTString();
+            }
 
-                function getCookie(cname) {
-                var name = cname + "=";
-                var decodedCookie = decodeURIComponent(document.cookie);
-                var ca = decodedCookie.split(';');
-                for(var i = 0; i < ca.length; i++) {
-                    var c = ca[i];
-                    while (c.charAt(0) == ' ') {
-                    c = c.substring(1);
-                    }
-                    if (c.indexOf(name) == 0) {
-                    return c.substring(name.length, c.length);
-                    }
-                }
-                return "";
-                }
+            function getCookie(name) {
+            var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+            return v ? v[2] : null;
+            }
 
+            function deleteCookie(name) { 
+                setCookie(name, '', -1); 
+            }
             
         </script>
     </body>
