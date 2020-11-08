@@ -154,6 +154,13 @@
 
                     canviarParaulaIncognita();
 
+                    //com hem possat espais a la paraula incognita (per veure-la millor),
+                    //els hem d'eliminar i comprovar si és igual que la paraula en joc
+                    // /_/g --> expressió regular que busca espais, la g és de(global)
+                    if(paraulaIncognita.replace(/ /g, "")==paraulaEnJoc){
+                        alert('Victoria');
+                    }
+
                 }
                 
                 else if (lletra == "") {
