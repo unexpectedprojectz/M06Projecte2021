@@ -14,10 +14,15 @@
 
         <script>
             
+            //deleteCookie("victories");
+            //deleteCookie("derrotes");
+            //deleteCookie("abandonaments");
+
             let finestra1, finestra2, finestra3;
             var llistaparaules, lletra, paraulaEnJoc, numParaules, numAleatori, srcImatge;
             var estatParaula = [];
             var paraulaIncognita = "";
+            var paraulaIncognitaFinal = "";
             var numErrors = 0, pulsat = false, continua = true;
 
             document.getElementById("btAbandonar").addEventListener("click", tancarFinestres);
@@ -49,7 +54,9 @@
                     paraulaEnJoc = llistaparaules[numAleatori];
                     console.log(paraulaEnJoc);
                 //si s'introdueix 1 paraula
-                }else {
+                }
+                
+                else {
                     paraulaEnJoc = resposta.trim().toLowerCase();
                     console.log(paraulaEnJoc);
                 }
@@ -57,20 +64,19 @@
                 //obrim les tres finestres secundaries
                 obrirFinestres();
 
-                
-
                 //omplim l'estat de la paraula amb espais incògnita
                 for (var i=0; i < paraulaEnJoc.length; i++) {
                     estatParaula[i] = '_';
                 }
 
-                //preparem la paraula amb incognites
+                //preparem la paraula amb incognites que veura el usuari
                 for (var i=0; i < estatParaula.length; i++) {
                     paraulaIncognita = paraulaIncognita + " " + estatParaula[i];
                 }
 
                 prepararParaulaIncognita();
-                estadistiques();
+
+                carregarEstadistiques();
 
             }
 
@@ -87,14 +93,16 @@
 
                 if(opcio == "Penjat"){
                     setTimeout(iniciaPartida,10000);
-                }else{
+                }
+                
+                else{
                     var numAbandonaments = 0; 
                     document.cookie = "abandonaments=" + numAbandonaments + 1;
                     setTimeout(iniciaPartida,5000);
                 }
             }
 
-            function estadistiques(){
+            function carregarEstadistiques(){
                 var cookieVictoria = getCookie("victories");
                 var cookieDerrota = getCookie("derrotes");
                 var cookieAbandonaments = getCookie("abandonaments");
@@ -103,8 +111,17 @@
                     finestra3.window.document.getElementById("victories").innerText = "Victories: " + cookieVictoria;
                     finestra3.window.document.getElementById("derrotes").innerText = "Derrotes: " + cookieDerrota;
                     finestra3.window.document.getElementById("abandonaments").innerText = "Abandonaments: " + cookieAbandonaments;
-                };        
+                };      
+            }
 
+            function canviarEstadistiques(){
+                var cookieVictoria = getCookie("victories");
+                var cookieDerrota = getCookie("derrotes");
+                var cookieAbandonaments = getCookie("abandonaments");
+
+                finestra3.window.document.getElementById("victories").innerText = "Victories: " + cookieVictoria;
+                finestra3.window.document.getElementById("derrotes").innerText = "Derrotes: " + cookieDerrota;
+                finestra3.window.document.getElementById("abandonaments").innerText = "Abandonaments: " + cookieAbandonaments;   
             }
 
             //coloquem la paraula amb incognites a la finestra2 per començar el joc
@@ -142,8 +159,6 @@
 
             }
 
-            
-
             //introduïr i comprovar lletres
             function introdueixLletra(){
                 
@@ -172,11 +187,19 @@
 
                     //com hem possat espais a la paraula incognita (per veure-la millor),
                     //els hem d'eliminar i comprovar si és igual que la paraula en joc
-                    // /_/g --> expressió regular que busca espais, la g és de(global)
-                    if(paraulaIncognita.replace(/ /g, "")==paraulaEnJoc){
+                    paraulaIncognitaFinal = "";
+
+                    for (var i=0; i < estatParaula.length; i++) {
+                        paraulaIncognitaFinal = paraulaIncognitaFinal + estatParaula[i];
+                    }
+
+                    console.log(paraulaIncognitaFinal);
+
+                    if(paraulaEnJoc == paraulaIncognitaFinal){
                         alert('Victoria');
-                        var numVictories = 0; 
+                        var numVictories = 0;
                         document.cookie = "victories=" + numVictories + 1;
+                        canviarEstadistiques();
                     }
 
                 }
@@ -191,8 +214,9 @@
                         var numDerrotes = 0; 
                         document.cookie = "derrotes=" + numDerrotes + 1;
                         tancarFinestres("Penjat");
-                        
-                    }else {
+                    }
+                    
+                    else {
                         alert("La paraula en joc no conté la lletra " + lletra);
                         numErrors = numErrors + 1;
                         canviarImatgePenjat(numErrors);
