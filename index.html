@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Finestra Principal</title>
+        <title>Penjat</title>
     </head>
 
     <body>
@@ -14,9 +14,9 @@
 
         <script>
             
-            deleteCookie("victories");
-            deleteCookie("derrotes");
-            deleteCookie("abandonaments");
+            //deleteCookie("victories");
+            //deleteCookie("derrotes");
+            //deleteCookie("abandonaments");
 
             let finestra1, finestra2, finestra3;
             var llistaparaules, lletra, paraulaEnJoc, numParaules, numAleatori, srcImatge;
@@ -165,6 +165,20 @@
                     break;
                     case 5:
                         srcImatge = "img/5.jpg";
+                       
+                        alert("PENJAT !!");
+
+                        var numDerrotes = 0; 
+
+                        if(getCookie('derrotes') == 0){
+                                document.cookie = "derrotes=" + 1;
+                        }else {
+                            numDerrotes = parseInt(getCookie('derrotes')) + 1 ;
+                            document.cookie = "derrotes=" +  numDerrotes;
+                        }
+
+                        canviarEstadistiques();
+
                     break;
                 }
                 
@@ -174,7 +188,7 @@
 
             //introduïr i comprovar lletres
             function introdueixLletra(){
-                
+
                 lletra = prompt("Introdueixi la lletra desitjada: ");
                 lletra = lletra.trim().toLowerCase();
                 //comprovar si la lletra està o no a la paraula
@@ -228,27 +242,16 @@
                 } 
                 
                 else {
-                    if(numErrors == 5){
-                        numErrors = 0;
-                        alert("PENJAT !!");
-                        numErrors = 0;
-                        var numDerrotes = 0; 
+                    alert("La paraula en joc no conté la lletra " + lletra);
+                    numErrors = numErrors + 1;
+                    canviarImatgePenjat(numErrors);
 
-                    if(getCookie('derrotes') == 0){
-                            document.cookie = "derrotes=" + 1;
-                    }else {
-                        numDerrotes = parseInt(getCookie('derrotes')) + 1 ;
-                        document.cookie = "derrotes=" +  numDerrotes;
-                    }
-                        tancarFinestres("Penjat");
-                    }
+                    if (numErrors == 5){
+                    numErrors = 0;
+
+                }
+
                     
-                    else {
-                        alert("La paraula en joc no conté la lletra " + lletra);
-                        numErrors = numErrors + 1;
-                        canviarImatgePenjat(numErrors);
-
-                    }
                 }
             }
 
