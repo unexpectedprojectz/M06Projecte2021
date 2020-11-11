@@ -26,7 +26,7 @@
             var paraulaIncognitaFinal = " ";
             var numErrors = 0, pulsat = false, continua = true;
 
-            document.getElementById("btAbandonar").addEventListener("click", tancarFinestres);
+            document.getElementById("btAbandonar").addEventListener("click", abandonament);
             document.getElementById("btIntroduirLletra").addEventListener("click", introdueixLletra);
 
             iniciaPartida();
@@ -85,32 +85,74 @@
 
             }
 
+            function continuarPartida (){
+                //tanquem les finestres amb la partida anterior per obrir les de la nova partida
+                tancarFinestres();
+                
+                //tornem a obtenir una paraula random
+                numParaules = llistaparaules.length;
+                numAleatori = Math.floor(Math.random() * (numParaules - 0)) + 0;
+                paraulaEnJoc = llistaparaules[numAleatori];
+                console.log(paraulaEnJoc);
+
+                //obrim les tres finestres secundaries
+                obrirFinestres();
+
+                //reeiniciem els camps per començar la nova patida
+                estatParaula = [];
+                paraulaIncognita = '';
+
+                //omplim l'estat de la paraula amb espais incògnita
+                for (var i=0; i < paraulaEnJoc.length; i++) {
+                    estatParaula[i] = '_';
+                }
+
+                //preparem la paraula amb incognites que veura el usuari
+                for (var i=0; i < estatParaula.length; i++) {
+                    paraulaIncognita = paraulaIncognita + " " + estatParaula[i];
+                }
+
+                prepararParaulaIncognita();
+
+                carregarEstadistiques();
+
+            }
+
             function obrirFinestres(){
                 finestra1 = window.open("finestra1.html", "finestra1", "top=300, left=400, width=300, height=200");
                 finestra2 = window.open("finestra2.html", "finestra2", "top=600, left=400, width=300, height=200");
                 finestra3 = window.open("finestra3.html", "finestra3", "top=450, left=1000, width=300, height=200");
             }
 
-            function tancarFinestres(opcio){
+            function tancarFinestres(){
                 finestra1.close();
                 finestra2.close();
-                finestra3.close();
-
-                if(opcio == "Penjat"){
-                    setTimeout(iniciaPartida,10000);
-                }
-                
-                else{
-                    if(getCookie('abandonaments') == 0){
-                        document.cookie = "abandonaments=" + 1;
-                    }else {
-                        numAbandonaments = parseInt(getCookie('abandonaments')) + 1 ;
-                        document.cookie = "abandonaments=" +  numAbandonaments;
-                    }
-                    setTimeout(iniciaPartida,5000);
-                }
+                finestra3.close();     
             }
 
+            function abandonament (){
+                
+                //si la cookie no ha estat definida, la creem amb la valor 1
+                if(getCookie('abandonaments') == 0){
+                    document.cookie = "abandonaments=" + 1;
+                //modifiquem el valor de la cookie
+                }else {
+                    numAbandonaments = parseInt(getCookie('abandonaments')) + 1 ;
+                    document.cookie = "abandonaments=" +  numAbandonaments;
+                } 
+
+                //si volem abandonar i anteriorment hem introduit només una paraula, es dona l'opció de tornar a introduir-ne
+                if (llistaparaules == undefined){
+                        tancarFinestres();
+                        setTimeout(iniciaPartida,5000);
+                //si volem abandonar, però hi ha més paraules en joc continuem la partida.
+                }else {
+                    setTimeout(continuarPartida,5000);
+                }  
+
+            }
+
+            //carreguem a les estadístiques a les cookies
             function carregarEstadistiques(){
                 var cookieVictoria = getCookie("victories");
                 var cookieDerrota = getCookie("derrotes");
@@ -123,6 +165,7 @@
                 };      
             }
 
+            //actualitzem les cookies
             function canviarEstadistiques(){
                 var cookieVictoria = getCookie("victories");
                 var cookieDerrota = getCookie("derrotes");
@@ -141,13 +184,12 @@
                 };
             }
 
-            //coloquem la paraula amb incognites a la finestra2 per començar el joc
-
+            //modifiquem l'estat de la paraula incognita
             function canviarParaulaIncognita(){
                 finestra2.window.document.getElementById("paraulaincognita").innerText = paraulaIncognita;
             }
 
-
+            //modifiquem l'estat de les imatges
             function canviarImatgePenjat(numErrors){
                 
                 switch (numErrors){
@@ -167,17 +209,28 @@
                         srcImatge = "img/5.jpg";
                        
                         alert("PENJAT !!");
-
+                        //reiniciem la variable per les següents partides
                         var numDerrotes = 0; 
 
+                        //si la cookie no ha estat definida, la creem amb la valor 1
                         if(getCookie('derrotes') == 0){
                                 document.cookie = "derrotes=" + 1;
+                        //modifiquem el valor de la cookie
                         }else {
                             numDerrotes = parseInt(getCookie('derrotes')) + 1 ;
                             document.cookie = "derrotes=" +  numDerrotes;
                         }
 
                         canviarEstadistiques();
+
+                        //si volem abandonar i anteriorment hem introduit només una paraula, es dona l'opció de tornar a introduir-ne
+                        if (llistaparaules == undefined){
+                            tancarFinestres();
+                            setTimeout(iniciaPartida,10000);
+                        //si hi ha més paraules en joc continuem la partida.
+                        }else {
+                            setTimeout(continuarPartida,10000);
+                        }
 
                     break;
                 }
@@ -224,16 +277,29 @@
 
                     if(paraulaEnJoc == paraulaIncognitaFinal){
                         alert('Victoria');
+                        
                         var numVictories = 0;
                         
+                        //si la cookie no ha estat definida, la creem amb la valor 1
                         if(getCookie('victories') == 0){
                             document.cookie = "victories=" + 1;
+                        //modifiquem el seu valor
                         }else {
                             numVictories = parseInt(getCookie('victories')) + 1 ;
                             document.cookie = "victories=" +  numVictories;
                         }
                         
                         canviarEstadistiques();
+
+                        //si volem abandonar i anteriorment hem introduit només una paraula, es dona l'opció de tornar a introduir-ne
+                        if (llistaparaules == undefined){
+                            tancarFinestres();
+                            iniciaPartida();
+                        //si hi ha més paraules en joc continuem la partida.
+                        }else {
+                            continuarPartida();
+                        }
+                        
                     }
                 }
                 
@@ -246,26 +312,31 @@
                     numErrors = numErrors + 1;
                     canviarImatgePenjat(numErrors);
 
+
                     if (numErrors == 5){
+                    //reiniciem la variable per les següents partides
                     numErrors = 0;
 
-                }
+                    }
 
                     
                 }
             }
 
+            //creació de cookies
             function setCookie(name, value, days) {
                 var d = new Date;
                 d.setTime(d.getTime() + 24*60*60*1000*days);
                 document.cookie = name + "=" + value + ";path=/;expires=" + d.toGMTString();
             }
-
+            
+            //obtenir cookie
             function getCookie(name) {
                 var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
                 return v ? v[2] : 0;
             }
-
+            
+            //esborrar una cookie
             function deleteCookie(name) { 
                 setCookie(name, '', -1); 
             }
