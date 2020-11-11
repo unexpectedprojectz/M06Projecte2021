@@ -64,7 +64,11 @@
 
                 //obrim les tres finestres secundaries
                 obrirFinestres();
-                
+
+                //reeiniciem els camps per si comença una nova patida
+                estatParaula = [];
+                paraulaIncognita = '';
+
                 //omplim l'estat de la paraula amb espais incògnita
                 for (var i=0; i < paraulaEnJoc.length; i++) {
                     estatParaula[i] = '_';
@@ -72,10 +76,9 @@
 
                 //preparem la paraula amb incognites que veura el usuari
                 for (var i=0; i < estatParaula.length; i++) {
-                    
                     paraulaIncognita = paraulaIncognita + " " + estatParaula[i];
                 }
-
+                
                 prepararParaulaIncognita();
 
                 carregarEstadistiques();
@@ -104,7 +107,6 @@
                         numAbandonaments = parseInt(getCookie('abandonaments')) + 1 ;
                         document.cookie = "abandonaments=" +  numAbandonaments;
                     }
-                
                     setTimeout(iniciaPartida,5000);
                 }
             }
@@ -131,15 +133,15 @@
                 finestra3.window.document.getElementById("abandonaments").innerText = "Abandonaments: " + cookieAbandonaments;   
             }
 
+
             //coloquem la paraula amb incognites a la finestra2 per començar el joc
             function prepararParaulaIncognita(){   
-
                 finestra2.window.onload = function() {
-                    finestra2.window.document.clear();
                     finestra2.window.document.getElementById("paraulaincognita").innerText = paraulaIncognita;
                 };
             }
 
+            //coloquem la paraula amb incognites a la finestra2 per començar el joc
 
             function canviarParaulaIncognita(){
                 finestra2.window.document.getElementById("paraulaincognita").innerText = paraulaIncognita;
@@ -209,16 +211,16 @@
                     if(paraulaEnJoc == paraulaIncognitaFinal){
                         alert('Victoria');
                         var numVictories = 0;
-
+                        
                         if(getCookie('victories') == 0){
-                        document.cookie = "victories=" + 1;
-                    }else {
-                        numVictories = parseInt(getCookie('victories')) + 1 ;
-                        document.cookie = "victories=" +  numVictories;
-                    }
+                            document.cookie = "victories=" + 1;
+                        }else {
+                            numVictories = parseInt(getCookie('victories')) + 1 ;
+                            document.cookie = "victories=" +  numVictories;
+                        }
+                        
                         canviarEstadistiques();
                     }
-
                 }
                 
                 else if (lletra == "") {
@@ -238,7 +240,6 @@
                         numDerrotes = parseInt(getCookie('derrotes')) + 1 ;
                         document.cookie = "derrotes=" +  numDerrotes;
                     }
-
                         tancarFinestres("Penjat");
                     }
                     
@@ -258,8 +259,8 @@
             }
 
             function getCookie(name) {
-            var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-            return v ? v[2] : 0;
+                var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+                return v ? v[2] : 0;
             }
 
             function deleteCookie(name) { 
