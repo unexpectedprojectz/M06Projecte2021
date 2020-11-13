@@ -1,0 +1,34 @@
+/****** GLOBAL *******/
+* {
+    font-family: 'Montserrat', sans-serif;
+}
+
+
+/****** INDEX.HTML *******/
+#divbotons {
+    text-align: center;
+}
+
+.botons {
+    color: white;
+    background-color:#1976d2;
+    padding: 15px;
+    border-radius: 20px;
+    border: 0;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.botons:hover {
+    background-color:#004ba0;
+}
+
+
+/****** FINESTRA2.HTML *******/
+#divparaula {
+    text-align: center;
+}
+
+#paraulaincognita {
+    font-size: 50px;
+}

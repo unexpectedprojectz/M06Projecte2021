@@ -4,13 +4,19 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Penjat</title>
+        <link rel="stylesheet" type="text/css" href="estils.css">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;1,300&display=swap" rel="stylesheet">
+        <title>Joc del penjat</title>
     </head>
 
     <body>
 
-        <button id="btIntroduirLletra">Introdueix una lletra</button>
-        <button id="btAbandonar">Abandonar partida</button>
+        <div id="divbotons">
+            <button id="btIntroduirLletra" class="botons">Introdueix una lletra</button>
+            <button id="btAbandonar" class="botons">Abandonar partida</button>
+        </div>
+        
 
         <script>
             
@@ -33,7 +39,7 @@
             
             function iniciaPartida(){ 
                 var resposta = prompt("Entra una paraula o grup de paraules (separades per comes i sense espais):");
-                //s'introdueixen més d'1 paraula
+                //si ntrodueixen més d'1 paraula
                 if(resposta.includes(",")){
                     llistaparaules = resposta.trim().toLowerCase().split(",");
                     //console.log(llistaparaules);
@@ -54,9 +60,8 @@
                     numAleatori = Math.floor(Math.random() * (numParaules - 0)) + 0;
                     paraulaEnJoc = llistaparaules[numAleatori];
                     console.log(paraulaEnJoc);
-                //si s'introdueix 1 paraula
                 }
-                
+                //si s'introdueix 1 paraula
                 else {
                     paraulaEnJoc = resposta.trim().toLowerCase();
                     console.log(paraulaEnJoc);
@@ -65,7 +70,7 @@
                 //obrim les tres finestres secundaries
                 obrirFinestres();
 
-                //reeiniciem els camps per si comença una nova patida
+                //reiniciem els camps per si comença una nova partida
                 estatParaula = [];
                 paraulaIncognita = '';
 
@@ -82,10 +87,9 @@
                 prepararParaulaIncognita();
 
                 carregarEstadistiques();
-
             }
 
-            function continuarPartida (){
+            function continuarPartida () {
                 //tanquem les finestres amb la partida anterior per obrir les de la nova partida
                 tancarFinestres();
                 
@@ -115,13 +119,12 @@
                 prepararParaulaIncognita();
 
                 carregarEstadistiques();
-
             }
 
             function obrirFinestres(){
-                finestra1 = window.open("finestra1.html", "finestra1", "top=300, left=400, width=300, height=200");
-                finestra2 = window.open("finestra2.html", "finestra2", "top=600, left=400, width=300, height=200");
-                finestra3 = window.open("finestra3.html", "finestra3", "top=450, left=1000, width=300, height=200");
+                finestra1 = window.open("finestra1.html", "finestra1", "top=300, left=400, width=375, height=200");
+                finestra2 = window.open("finestra2.html", "finestra2", "top=600, left=400, width=375, height=200");
+                finestra3 = window.open("finestra3.html", "finestra3", "top=450, left=1000, width=375, height=200");
             }
 
             function tancarFinestres(){
@@ -133,20 +136,24 @@
             function abandonament (){
                 
                 //si la cookie no ha estat definida, la creem amb la valor 1
-                if(getCookie('abandonaments') == 0){
+                if(getCookie('abandonaments') == 0) {
                     document.cookie = "abandonaments=" + 1;
                 //modifiquem el valor de la cookie
-                }else {
+                }
+                
+                else {
                     numAbandonaments = parseInt(getCookie('abandonaments')) + 1 ;
                     document.cookie = "abandonaments=" +  numAbandonaments;
                 } 
 
                 //si volem abandonar i anteriorment hem introduit només una paraula, es dona l'opció de tornar a introduir-ne
-                if (llistaparaules == undefined){
+                if (llistaparaules == undefined) {
                         tancarFinestres();
                         setTimeout(iniciaPartida,5000);
                 //si volem abandonar, però hi ha més paraules en joc continuem la partida.
-                }else {
+                }
+                
+                else {
                     setTimeout(continuarPartida,5000);
                 }  
 
@@ -316,10 +323,7 @@
                     if (numErrors == 5){
                     //reiniciem la variable per les següents partides
                     numErrors = 0;
-
                     }
-
-                    
                 }
             }
 
@@ -342,6 +346,7 @@
             }
             
         </script>
+        
     </body>
 
 </html>
