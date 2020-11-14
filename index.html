@@ -6,7 +6,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="estils.css">
         <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;1,300&display=swap" rel="stylesheet">
+        <link
+            href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;1,300&display=swap"
+            rel="stylesheet">
         <title>Joc del penjat</title>
     </head>
 
@@ -16,7 +18,7 @@
             <button id="btIntroduirLletra" class="botons">Introdueix una lletra</button>
             <button id="btAbandonar" class="botons">Abandonar partida</button>
         </div>
-        
+
 
         <script>
             
@@ -30,7 +32,7 @@
             var numAbandonaments = 0;
             var paraulaIncognita = " ";
             var paraulaIncognitaFinal = " ";
-            var numErrors = 0, pulsat = false, continua = true;
+            var numErrors = 0;
 
             document.getElementById("btAbandonar").addEventListener("click", abandonament);
             document.getElementById("btIntroduirLletra").addEventListener("click", introdueixLletra);
@@ -121,12 +123,14 @@
                 carregarEstadistiques();
             }
 
+            //Obrim finestres
             function obrirFinestres(){
                 finestra1 = window.open("finestra1.html", "finestra1", "top=300, left=400, width=375, height=200");
                 finestra2 = window.open("finestra2.html", "finestra2", "top=600, left=400, width=375, height=200");
                 finestra3 = window.open("finestra3.html", "finestra3", "top=450, left=1000, width=375, height=200");
             }
 
+            //Tanquem finestres
             function tancarFinestres(){
                 finestra1.close();
                 finestra2.close();
@@ -134,7 +138,6 @@
             }
 
             function abandonament (){
-                
                 //si la cookie no ha estat definida, la creem amb la valor 1
                 if(getCookie('abandonaments') == 0) {
                     document.cookie = "abandonaments=" + 1;
@@ -251,80 +254,85 @@
 
                 lletra = prompt("Introdueixi la lletra desitjada: ");
                 lletra = lletra.trim().toLowerCase();
-                //comprovar si la lletra està o no a la paraula
-                if(paraulaEnJoc.indexOf(lletra) != -1){
-
-                    alert("La paraula en joc si conté la lletra " + lletra);
-                    // comprovem si la paraula en joc conté la lletra i si és així ho canviem a estat paraula
-                    for (var i=0; i < paraulaEnJoc.length; i++) {
-                        if (paraulaEnJoc.charAt(i) == lletra){
-                            estatParaula[i] = lletra;
-                        }
-
-                    }
-
-                    paraulaIncognita = "";
-                    
-                    // canviem la paraula que mostrem a l'usuari amb el nou estat
-                    for (var i=0; i < estatParaula.length; i++) {
-                        paraulaIncognita = paraulaIncognita + " " + estatParaula[i];
-                    }
-
-                    canviarParaulaIncognita();
-
-                    //com hem possat espais a la paraula incognita (per veure-la millor),
-                    //els hem d'eliminar i comprovar si és igual que la paraula en joc
-                    paraulaIncognitaFinal = "";
-
-                    for (var i=0; i < estatParaula.length; i++) {
-                        paraulaIncognitaFinal = paraulaIncognitaFinal + estatParaula[i];
-                    }
-
-                    console.log(paraulaIncognitaFinal);
-
-                    if(paraulaEnJoc == paraulaIncognitaFinal){
-                        alert('Victoria');
-                        
-                        var numVictories = 0;
-                        
-                        //si la cookie no ha estat definida, la creem amb la valor 1
-                        if(getCookie('victories') == 0){
-                            document.cookie = "victories=" + 1;
-                        //modifiquem el seu valor
-                        }else {
-                            numVictories = parseInt(getCookie('victories')) + 1 ;
-                            document.cookie = "victories=" +  numVictories;
-                        }
-                        
-                        canviarEstadistiques();
-
-                        //si volem abandonar i anteriorment hem introduit només una paraula, es dona l'opció de tornar a introduir-ne
-                        if (llistaparaules == undefined){
-                            tancarFinestres();
-                            iniciaPartida();
-                        //si hi ha més paraules en joc continuem la partida.
-                        }else {
-                            continuarPartida();
-                        }
-                        
-                    }
-                }
                 
-                else if (lletra == "") {
+                //si no s'introdueix cap lletra
+                if(lletra == ""){
                     alert("Introdueixi una lletra si us plau...");
-                } 
-                
-                else {
+                }else {
+
+                    //comprovar si la lletra està o no a la paraula
+                    if(paraulaEnJoc.indexOf(lletra) != -1){
+
+                        alert("La paraula en joc si conté la lletra " + lletra);
+                        // comprovem si la paraula en joc conté la lletra i si és així ho canviem a estat paraula
+                        for (var i=0; i < paraulaEnJoc.length; i++) {
+                            if (paraulaEnJoc.charAt(i) == lletra){
+                                estatParaula[i] = lletra;
+                            }
+
+                        }
+
+                        paraulaIncognita = "";
+
+                        // canviem la paraula que mostrem a l'usuari amb el nou estat
+                        for (var i=0; i < estatParaula.length; i++) {
+                            paraulaIncognita = paraulaIncognita + " " + estatParaula[i];
+                        }
+
+                        canviarParaulaIncognita();
+
+                        //com hem possat espais a la paraula incognita (per veure-la millor),
+                        //els hem d'eliminar i comprovar si és igual que la paraula en joc
+                        paraulaIncognitaFinal = "";
+
+                        for (var i=0; i < estatParaula.length; i++) {
+                            paraulaIncognitaFinal = paraulaIncognitaFinal + estatParaula[i];
+                        }
+
+                        console.log(paraulaIncognitaFinal);
+
+                        if(paraulaEnJoc == paraulaIncognitaFinal){
+                            alert('Victoria');
+                            
+                            var numVictories = 0;
+                            
+                            //si la cookie no ha estat definida, la creem amb la valor 1
+                            if(getCookie('victories') == 0){
+                                document.cookie = "victories=" + 1;
+                            //modifiquem el seu valor
+                            }else {
+                                numVictories = parseInt(getCookie('victories')) + 1 ;
+                                document.cookie = "victories=" +  numVictories;
+                            }
+    
+                            canviarEstadistiques();
+
+                            //si volem abandonar i anteriorment hem introduit només una paraula, es dona l'opció de tornar a introduir-ne
+                            if (llistaparaules == undefined){
+                                tancarFinestres();
+                                iniciaPartida();
+                            //si hi ha més paraules en joc continuem la partida.
+                            }else {
+                                continuarPartida();
+                            }
+    
+                        }
+                    }
+
+                    else {
                     alert("La paraula en joc no conté la lletra " + lletra);
                     numErrors = numErrors + 1;
                     canviarImatgePenjat(numErrors);
 
 
-                    if (numErrors == 5){
-                    //reiniciem la variable per les següents partides
-                    numErrors = 0;
+                        if (numErrors == 5){
+                        //reiniciem la variable per les següents partides
+                        numErrors = 0;
+                        }
                     }
+
                 }
+
             }
 
             //creació de cookies
@@ -346,7 +354,6 @@
             }
             
         </script>
-        
     </body>
 
 </html>
