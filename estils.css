@@ -24,11 +24,15 @@
 }
 
 
-/****** FINESTRA2.HTML *******/
+/****** FINESTRA2.HTML I FINESTRA4.HTML *******/
 #divparaula {
     text-align: center;
 }
 
 #paraulaincognita {
     font-size: 50px;
+}
+
+#tempsRestant {
+    font-size: 75px;
 }

@@ -16,6 +16,7 @@
 
         <div id="divbotons">
             <button id="btIntroduirLletra" class="botons">Introdueix una lletra</button>
+            <button id="btTemporitzador" class="botons">Activar temporitzador</button>
             <button id="btAbandonar" class="botons">Abandonar partida</button>
         </div>
 
@@ -26,16 +27,19 @@
             //deleteCookie("derrotes");
             //deleteCookie("abandonaments");
 
-            let finestra1, finestra2, finestra3;
+            let finestra1, finestra2, finestra3, finestra4;
             var llistaparaules, lletra, paraulaEnJoc, numParaules, numAleatori, srcImatge;
             var estatParaula = [];
             var numAbandonaments = 0;
             var paraulaIncognita = " ";
             var paraulaIncognitaFinal = " ";
             var numErrors = 0;
+            var minutsinicial = 1;
+            let temps = minutsinicial * 60;
 
             document.getElementById("btAbandonar").addEventListener("click", abandonament);
             document.getElementById("btIntroduirLletra").addEventListener("click", introdueixLletra);
+            document.getElementById("btTemporitzador").addEventListener("click", activarTemporitzador);
 
             iniciaPartida();
             
@@ -127,7 +131,7 @@
             function obrirFinestres(){
                 finestra1 = window.open("finestra1.html", "finestra1", "top=300, left=400, width=375, height=200");
                 finestra2 = window.open("finestra2.html", "finestra2", "top=600, left=400, width=375, height=200");
-                finestra3 = window.open("finestra3.html", "finestra3", "top=450, left=1000, width=375, height=200");
+                finestra3 = window.open("finestra3.html", "finestra3", "top=300, left=1000, width=375, height=200");
             }
 
             //Tanquem finestres
@@ -351,6 +355,20 @@
             //esborrar una cookie
             function deleteCookie(name) { 
                 setCookie(name, '', -1); 
+            }
+
+            function activarTemporitzador() {
+                finestra4 = window.open("finestra4.html", "finestra4", "top=600, left=1000, width=375, height=200");
+                setInterval(actualitzarTemporitzador,1000);
+            }
+
+            function actualitzarTemporitzador() {
+                let minuts = Math.floor(temps/60);
+                let segons = temps % 60;
+
+                segons = segons < 10 ? '0' + segons : segons;
+                finestra4.window.document.getElementById("tempsRestant").innerText = minuts + " : " + segons;
+                temps --;
             }
             
         </script>
