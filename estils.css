@@ -11,7 +11,6 @@
 
 .botons {
     color: white;
-    background-color:#1976d2;
     padding: 15px;
     border-radius: 20px;
     border: 0;
@@ -19,8 +18,20 @@
     margin: 10px;
 }
 
-.botons:hover {
+.botonormal {
+    background-color:#1976d2;
+}
+
+.botoabandonar {
+    background-color:#c62828;
+}
+
+.botonormal:hover {
     background-color:#004ba0;
+}
+
+.botoabandonar:hover {
+    background-color:#8e0000;
 }
 
 

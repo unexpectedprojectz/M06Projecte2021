@@ -15,9 +15,9 @@
     <body>
 
         <div id="divbotons">
-            <button id="btIntroduirLletra" class="botons">Introdueix una lletra</button>
-            <button id="btTemporitzador" class="botons">Activar temporitzador</button>
-            <button id="btAbandonar" class="botons">Abandonar partida</button>
+            <button id="btIntroduirLletra" class="botons botonormal">Introdueix una lletra</button>
+            <button id="btTemporitzador" class="botons botonormal">Activar temporitzador</button>
+            <button id="btAbandonar" class="botons botoabandonar">Abandonar partida</button>
         </div>
 
 
@@ -34,8 +34,8 @@
             var paraulaIncognita = " ";
             var paraulaIncognitaFinal = " ";
             var numErrors = 0;
-            var minutsinicial = 1;
-            let temps = minutsinicial * 60;
+            const minutsinicial = 1;
+            let temps;
 
             document.getElementById("btAbandonar").addEventListener("click", abandonament);
             document.getElementById("btIntroduirLletra").addEventListener("click", introdueixLletra);
@@ -44,6 +44,10 @@
             iniciaPartida();
             
             function iniciaPartida(){ 
+                
+                //inicialitzem el temps del temporitzador
+                temps = minutsinicial * 60;
+
                 var resposta = prompt("Entra una paraula o grup de paraules (separades per comes i sense espais):");
                 //si ntrodueixen més d'1 paraula
                 if(resposta.includes(",")){
@@ -96,6 +100,10 @@
             }
 
             function continuarPartida () {
+                
+                //inicialitzem el temps del temporitzador
+                temps = minutsinicial * 60;
+                
                 //tanquem les finestres amb la partida anterior per obrir les de la nova partida
                 tancarFinestres();
                 
@@ -157,16 +165,15 @@
                 if (llistaparaules == undefined) {
                         tancarFinestres();
                         setTimeout(iniciaPartida,5000);
-                //si volem abandonar, però hi ha més paraules en joc continuem la partida.
                 }
-                
+                //si volem abandonar, però hi ha més paraules en joc continuem la partida.
                 else {
                     setTimeout(continuarPartida,5000);
                 }  
 
             }
 
-            //carreguem a les estadístiques a les cookies
+            //carreguem a les estadístiques les cookies
             function carregarEstadistiques(){
                 var cookieVictoria = getCookie("victories");
                 var cookieDerrota = getCookie("derrotes");
@@ -223,14 +230,17 @@
                         srcImatge = "img/5.jpg";
                        
                         alert("PENJAT !!");
-                        //reiniciem la variable per les següents partides
-                        var numDerrotes = 0; 
+                        //reiniciem la variable número de derrotes per la següent partida
+                        var numDerrotes = 0;
+                        //reiniciem la variable número d'errors per la següent partida
+                        numErrors = 0;
 
                         //si la cookie no ha estat definida, la creem amb la valor 1
                         if(getCookie('derrotes') == 0){
                                 document.cookie = "derrotes=" + 1;
                         //modifiquem el valor de la cookie
-                        }else {
+                        }
+                        else {
                             numDerrotes = parseInt(getCookie('derrotes')) + 1 ;
                             document.cookie = "derrotes=" +  numDerrotes;
                         }
@@ -242,7 +252,8 @@
                             tancarFinestres();
                             setTimeout(iniciaPartida,10000);
                         //si hi ha més paraules en joc continuem la partida.
-                        }else {
+                        }
+                        else {
                             setTimeout(continuarPartida,10000);
                         }
 
@@ -304,7 +315,8 @@
                             if(getCookie('victories') == 0){
                                 document.cookie = "victories=" + 1;
                             //modifiquem el seu valor
-                            }else {
+                            }
+                            else {
                                 numVictories = parseInt(getCookie('victories')) + 1 ;
                                 document.cookie = "victories=" +  numVictories;
                             }
@@ -316,7 +328,8 @@
                                 tancarFinestres();
                                 iniciaPartida();
                             //si hi ha més paraules en joc continuem la partida.
-                            }else {
+                            }
+                            else {
                                 continuarPartida();
                             }
     
@@ -324,15 +337,9 @@
                     }
 
                     else {
-                    alert("La paraula en joc no conté la lletra " + lletra);
-                    numErrors = numErrors + 1;
-                    canviarImatgePenjat(numErrors);
-
-
-                        if (numErrors == 5){
-                        //reiniciem la variable per les següents partides
-                        numErrors = 0;
-                        }
+                        alert("La paraula en joc no conté la lletra " + lletra);
+                        numErrors = numErrors + 1;
+                        canviarImatgePenjat(numErrors);
                     }
 
                 }
@@ -366,9 +373,31 @@
                 let minuts = Math.floor(temps/60);
                 let segons = temps % 60;
 
-                segons = segons < 10 ? '0' + segons : segons;
+                console.log("minuts principio: " + minuts + " segons principio: " + segons);
+
+                //segons = segons < 10 ? '0' + segons : segons;
                 finestra4.window.document.getElementById("tempsRestant").innerText = minuts + " : " + segons;
-                temps --;
+                // restem temps la primera vegada i el comptador queda a 0:59
+                if (minuts == 1 && segons == 0){
+                    temps --;
+                    console.log("minuts primero: " + minuts + " segons primero: " + segons);
+                }
+                // com el comptador va restant cada 1 segon hem de controlar que només resti quan no estigui a 0
+                if (minuts = 0 && segons != 0 && segons != "00"){
+                    temps --;
+                    console.log("minuts segundo: " + minuts + " segons segundo: " + segons);
+                }
+
+                //console.log("minuts: " + minuts);
+                //console.log("segons: " + segons);
+
+                if (minuts == 0 && segons == 0){
+                    console.log("entra: minutos: " + minuts +  " segundos: " +segons);
+                    //fem que si el contador arriba a 0 actui com una derrota, és a dir contant 5 errors
+                    canviarImatgePenjat(5);
+                    
+                }
+
             }
             
         </script>
