@@ -352,21 +352,26 @@
 
             }
 
-            //creació de cookies
+            //creació de cookie pasant-li el nom, valor i data de caducitat
             function setCookie(name, value, days) {
+                //creem la data
                 var d = new Date;
                 d.setTime(d.getTime() + 24*60*60*1000*days);
+                //creem la cookie
                 document.cookie = name + "=" + value + ";path=/;expires=" + d.toGMTString();
             }
             
-            //obtenir cookie
+            //obtenir cookie, pel nom
             function getCookie(name) {
+                //cerca de la cookie
                 var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+                //retorna el valor
                 return v ? v[2] : 0;
             }
             
-            //esborrar una cookie
+            //esborrar una cookie pel nom
             function deleteCookie(name) { 
+                //posem la cookie en blanc 
                 setCookie(name, '', -1); 
             }
 
