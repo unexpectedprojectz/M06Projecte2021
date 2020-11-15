@@ -370,22 +370,23 @@
                 setCookie(name, '', -1); 
             }
 
+            //obrim la finestra del temporitzador i l'actualitzem cada 1 segon
             function activarTemporitzador() {
                 finestra4 = window.open("finestra4.html", "finestra4", "top=660, left=1050, width=375, height=200");
                 setInterval(actualitzarTemporitzador,1000);
             }
 
             function actualitzarTemporitzador() {
-
+                //si el temporitzador acaba de començar(1:00) o no ha finalitzat encara (no és 0:00) restem temps, recalculem minuts i segons i mostrem
                 if ((minuts == 1 && segons == 0)||!(minuts == 0 && segons == 0)) {
                     temps --;
                     minuts = Math.floor(temps/60);
                     segons = temps % 60;
                     finestra4.window.document.getElementById("tempsRestant").innerText = minuts + " : " + (segons < 10 ? '0' + segons : segons);
                 }
-
+                //fem que si el comptador arriba a 0:00 actui com una derrota, és a dir comptant 5 errors
+                //continuartempo ens serveix per a que no segueixi entrant a aquesta condició mentres es fa el compte endarrera de una derrota(10s) o abandonament(5s)
                 if (minuts == 0 && segons == 0 && continuartempo == false) {
-                    //fem que si el contador arriba a 0 actui com una derrota, és a dir contant 5 errors
                     canviarEstatPenjat(5);
                 }
                 
