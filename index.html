@@ -144,13 +144,13 @@
             function abandonament (){
                 //si la cookie no ha estat definida, la creem amb la valor 1
                 if(getCookie('abandonaments') == 0) {
-                    document.cookie = "abandonaments=" + 1;
+                    setCookie("abandonaments",1,365);
                 //modifiquem el valor de la cookie
                 }
                 
                 else {
                     numAbandonaments = parseInt(getCookie('abandonaments')) + 1 ;
-                    document.cookie = "abandonaments=" +  numAbandonaments;
+                    setCookie("abandonaments",numAbandonaments,365);
                 } 
 
                 //si volem abandonar i anteriorment hem introduit només una paraula, es dona l'opció de tornar a introduir-ne
@@ -228,11 +228,11 @@
 
                         //si la cookie no ha estat definida, la creem amb la valor 1
                         if(getCookie('derrotes') == 0){
-                                document.cookie = "derrotes=" + 1;
+                                setCookie("derrotes",1,365);
                         //modifiquem el valor de la cookie
                         }else {
                             numDerrotes = parseInt(getCookie('derrotes')) + 1 ;
-                            document.cookie = "derrotes=" +  numDerrotes;
+                            setCookie("derrotes",numDerrotes,365);
                         }
 
                         canviarEstadistiques();
@@ -302,11 +302,11 @@
                             
                             //si la cookie no ha estat definida, la creem amb la valor 1
                             if(getCookie('victories') == 0){
-                                document.cookie = "victories=" + 1;
+                                setCookie('victories',1,365);
                             //modifiquem el seu valor
                             }else {
                                 numVictories = parseInt(getCookie('victories')) + 1 ;
-                                document.cookie = "victories=" +  numVictories;
+                                setCookie('victories',numVictories,365);
                             }
     
                             canviarEstadistiques();
