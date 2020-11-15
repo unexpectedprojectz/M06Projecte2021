@@ -5,7 +5,7 @@
 
 
 /****** INDEX.HTML *******/
-#divbotons {
+#divprincipal {
     text-align: center;
 }
 
@@ -18,16 +18,24 @@
     margin: 10px;
 }
 
-.botonormal {
+.botolletra {
     background-color:#1976d2;
+}
+
+.bototemporitzador {
+    background-color:#ff5722;
 }
 
 .botoabandonar {
     background-color:#c62828;
 }
 
-.botonormal:hover {
+.botolletra:hover {
     background-color:#004ba0;
+}
+
+.bototemporitzador:hover {
+    background-color:#c41c00;
 }
 
 .botoabandonar:hover {

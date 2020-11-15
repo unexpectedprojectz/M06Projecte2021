@@ -6,20 +6,19 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="estils.css">
         <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link
-            href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;1,300&display=swap"
-            rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;1,300&display=swap" rel="stylesheet">
         <title>Joc del penjat</title>
     </head>
 
     <body>
 
-        <div id="divbotons">
-            <button id="btIntroduirLletra" class="botons">Introdueix una lletra</button>
-            <button id="btTemporitzador" class="botons">Activar temporitzador</button>
-            <button id="btAbandonar" class="botons">Abandonar partida</button>
+        <div id="divprincipal">
+            <h1>Joc del penjat</h1>
+            <br>
+            <button id="btIntroduirLletra" class="botons botolletra">Introduir una lletra</button>
+            <button id="btTemporitzador" class="botons bototemporitzador">Activar temporitzador</button>
+            <button id="btAbandonar" class="botons botoabandonar">Abandonar partida</button>
         </div>
-
 
         <script>
             
@@ -35,7 +34,7 @@
             var paraulaIncognitaFinal = " ";
             var numErrors = 0;
             var minutsinicial = 1;
-            let temps = minutsinicial * 60;
+            let temps, minuts, segons;
 
             document.getElementById("btAbandonar").addEventListener("click", abandonament);
             document.getElementById("btIntroduirLletra").addEventListener("click", introdueixLletra);
@@ -44,17 +43,23 @@
             iniciaPartida();
             
             function iniciaPartida(){ 
+                //inicialitzem el temps del temporitzador
+                //funció Math.floor de javascript per obtenir el valor arrodonit minuts
+                // aconseguim els segons del residu de la divisió del temps entre 60
+                temps = minutsinicial * 60;
+                minuts = Math.floor(temps/60);
+                segons = temps % 60;
+
+                continuartempo = false;
+                
                 var resposta = prompt("Entra una paraula o grup de paraules (separades per comes i sense espais):");
-                //si ntrodueixen més d'1 paraula
+                //si s'introdueix més d'1 paraula
                 if(resposta.includes(",")){
                     llistaparaules = resposta.trim().toLowerCase().split(",");
-                    //console.log(llistaparaules);
                     //variable per saber el numero de paraules introduïdes
                     numParaules = llistaparaules.length;
-                    //console.log(numParaules);
                     //num aleatori entre la posició 0 i el total de paraules (llistaparaules.length)
                     numAleatori = Math.floor(Math.random() * (numParaules - 0)) + 0;
-                    //console.log(numAleatori);
                     //escollir aleatoriament una paraula per començar el joc
                     paraulaEnJoc = llistaparaules[numAleatori];
                     console.log(paraulaEnJoc);
@@ -96,6 +101,15 @@
             }
 
             function continuarPartida () {
+                //inicialitzem el temps del temporitzador
+                //funció Math.floor de javascript per obtenir el valor arrodonit minuts
+                // aconseguim els segons del residu de la divisió del temps entre 60
+                temps = minutsinicial * 60;
+                minuts = Math.floor(temps/60);
+                segons = temps % 60;
+
+                continuartempo = false;
+                
                 //tanquem les finestres amb la partida anterior per obrir les de la nova partida
                 tancarFinestres();
                 
@@ -129,9 +143,9 @@
 
             //Obrim finestres
             function obrirFinestres(){
-                finestra1 = window.open("finestra1.html", "finestra1", "top=300, left=400, width=375, height=200");
-                finestra2 = window.open("finestra2.html", "finestra2", "top=600, left=400, width=375, height=200");
-                finestra3 = window.open("finestra3.html", "finestra3", "top=300, left=1000, width=375, height=200");
+                finestra1 = window.open("finestra1.html", "finestra1", "top=350, left=600, width=375, height=200");
+                finestra2 = window.open("finestra2.html", "finestra2", "top=650, left=600, width=375, height=200");
+                finestra3 = window.open("finestra3.html", "finestra3", "top=350, left=1050, width=375, height=200");
             }
 
             //Tanquem finestres
@@ -157,16 +171,15 @@
                 if (llistaparaules == undefined) {
                         tancarFinestres();
                         setTimeout(iniciaPartida,5000);
-                //si volem abandonar, però hi ha més paraules en joc continuem la partida.
                 }
-                
+                //si volem abandonar, però hi ha més paraules en joc continuem la partida.
                 else {
                     setTimeout(continuarPartida,5000);
                 }  
 
             }
 
-            //carreguem a les estadístiques a les cookies
+            //carreguem les cookies de les estadístiques
             function carregarEstadistiques(){
                 var cookieVictoria = getCookie("victories");
                 var cookieDerrota = getCookie("derrotes");
@@ -204,7 +217,7 @@
             }
 
             //modifiquem l'estat de les imatges
-            function canviarImatgePenjat(numErrors){
+            function canviarEstatPenjat(numErrors){
                 
                 switch (numErrors){
                     case 1:
@@ -223,15 +236,17 @@
                         srcImatge = "img/5.jpg";
                        
                         alert("PENJAT !!");
-                        //reiniciem la variable per les següents partides
-                        var numDerrotes = 0; 
+                        //reiniciem la variable número de derrotes per la següent partida
+                        var numDerrotes = 0;
+                        //reiniciem la variable número d'errors per la següent partida
+                        numErrors = 0;
 
                         //si la cookie no ha estat definida, la creem amb la valor 1
                         if(getCookie('derrotes') == 0){
-                                setCookie("derrotes",1,365);
-                        //modifiquem el valor de la cookie
-                        }else {
-                            numDerrotes = parseInt(getCookie('derrotes')) + 1 ;
+                            setCookie("derrotes",1,365);
+                        }
+                        else {
+                            numDerrotes = parseInt(getCookie('derrotes')) + 1;
                             setCookie("derrotes",numDerrotes,365);
                         }
 
@@ -239,10 +254,13 @@
 
                         //si volem abandonar i anteriorment hem introduit només una paraula, es dona l'opció de tornar a introduir-ne
                         if (llistaparaules == undefined){
+                            continuartempo = true;
                             tancarFinestres();
                             setTimeout(iniciaPartida,10000);
                         //si hi ha més paraules en joc continuem la partida.
-                        }else {
+                        }
+                        else {
+                            continuartempo = true;
                             setTimeout(continuarPartida,10000);
                         }
 
@@ -262,7 +280,8 @@
                 //si no s'introdueix cap lletra
                 if(lletra == ""){
                     alert("Introdueixi una lletra si us plau...");
-                }else {
+                }
+                else {
 
                     //comprovar si la lletra està o no a la paraula
                     if(paraulaEnJoc.indexOf(lletra) != -1){
@@ -293,8 +312,6 @@
                             paraulaIncognitaFinal = paraulaIncognitaFinal + estatParaula[i];
                         }
 
-                        console.log(paraulaIncognitaFinal);
-
                         if(paraulaEnJoc == paraulaIncognitaFinal){
                             alert('Victoria');
                             
@@ -304,7 +321,8 @@
                             if(getCookie('victories') == 0){
                                 setCookie('victories',1,365);
                             //modifiquem el seu valor
-                            }else {
+                            }
+                            else {
                                 numVictories = parseInt(getCookie('victories')) + 1 ;
                                 setCookie('victories',numVictories,365);
                             }
@@ -316,7 +334,8 @@
                                 tancarFinestres();
                                 iniciaPartida();
                             //si hi ha més paraules en joc continuem la partida.
-                            }else {
+                            }
+                            else {
                                 continuarPartida();
                             }
     
@@ -324,15 +343,9 @@
                     }
 
                     else {
-                    alert("La paraula en joc no conté la lletra " + lletra);
-                    numErrors = numErrors + 1;
-                    canviarImatgePenjat(numErrors);
-
-
-                        if (numErrors == 5){
-                        //reiniciem la variable per les següents partides
-                        numErrors = 0;
-                        }
+                        alert("La paraula en joc no conté la lletra " + lletra);
+                        numErrors = numErrors + 1;
+                        canviarEstatPenjat(numErrors);
                     }
 
                 }
@@ -358,17 +371,24 @@
             }
 
             function activarTemporitzador() {
-                finestra4 = window.open("finestra4.html", "finestra4", "top=600, left=1000, width=375, height=200");
+                finestra4 = window.open("finestra4.html", "finestra4", "top=650, left=1050, width=375, height=200");
                 setInterval(actualitzarTemporitzador,1000);
             }
 
             function actualitzarTemporitzador() {
-                let minuts = Math.floor(temps/60);
-                let segons = temps % 60;
 
-                segons = segons < 10 ? '0' + segons : segons;
-                finestra4.window.document.getElementById("tempsRestant").innerText = minuts + " : " + segons;
-                temps --;
+                if ((minuts == 1 && segons == 0)||!(minuts == 0 && segons == 0)) {
+                    temps --;
+                    minuts = Math.floor(temps/60);
+                    segons = temps % 60;
+                    finestra4.window.document.getElementById("tempsRestant").innerText = minuts + " : " + (segons < 10 ? '0' + segons : segons);
+                }
+
+                if (minuts == 0 && segons == 0 && continuartempo == false) {
+                    //fem que si el contador arriba a 0 actui com una derrota, és a dir contant 5 errors
+                    canviarEstatPenjat(5);
+                }
+                
             }
             
         </script>
